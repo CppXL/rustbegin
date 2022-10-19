@@ -1,7 +1,6 @@
 mod utils;
 
 use core::arch::asm;
-use utils::p_asdf;
 
 #[derive(Debug)]
 struct File {
@@ -16,7 +15,6 @@ fn main() {
     tvector();
     println!("{}", "----".repeat(20));
     operating_sys();
-    p_asdf();
 
     let f1 = File {
         name: String::from("f1.txt"),
@@ -26,6 +24,23 @@ fn main() {
     let f1_length = &f1.data.len();
     println!("{:?}", f1);
     println!("{} is {} bytes long", f1_name, f1_length);
+    // let array = vec![1, 2, 3, 4];
+    let array: [i32; 4] = [1, 2, 3, 4];
+    println!("{:?}", array);
+    ifcondition();
+}
+
+fn ifcondition() {
+    let o = Some(3);
+    let v = match o {
+        Some(x) => x,
+        _ => 0,
+    };
+    println!("v:{}", v);
+
+    let o = Some(3);
+    let p = if let Some(x) = o { x } else { 0 };
+    println!("{}", p);
 }
 
 fn begin_code() {
@@ -155,7 +170,7 @@ fn begin_code() {
 }
 
 fn take_ownership(some_string: String) {
-    println!("s2.len(): {}", some_string);
+    println!("s2.len(): {}", some_string.len());
 }
 
 fn gives_ownership() -> String {
@@ -197,6 +212,12 @@ fn loops() {
             } // Continues the loop over `y`.
             println!("x: {}, y: {}", x, y);
         }
+    }
+
+    let a = [4, 3, 2, 1];
+    // `.iter()` 方法把 `a` 数组变成一个迭代器
+    for (i, v) in a.iter().enumerate() {
+        println!("第{}个元素是{}", i + 1, v);
     }
 }
 
