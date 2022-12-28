@@ -1,6 +1,7 @@
 mod utils;
 
 use core::arch::asm;
+use std::ops::Add;
 
 #[derive(Debug)]
 struct File {
@@ -27,10 +28,28 @@ fn main() {
     // let array = vec![1, 2, 3, 4];
     let array: [i32; 4] = [1, 2, 3, 4];
     println!("{:?}", array);
+    for i in array.iter() {
+        println!("i:{}", i)
+    }
     ifcondition();
+    statement();
+    t_str();
+    t_tup();
+    t_struct();
+}
+
+fn t_str() {
+    let s = String::from("asdfgh");
+    let mut s1 = &s[0..3];
+    println!("{}", s1);
+    s1 = &s[0..s.len()];
+    println!("{}", s1);
+    println!("{}", s.len());
+    t_str_func();
 }
 
 fn ifcondition() {
+    println!("----------------call ifcondition----------------");
     let o = Some(3);
     let v = match o {
         Some(x) => x,
@@ -39,15 +58,18 @@ fn ifcondition() {
     println!("v:{}", v);
 
     let o = Some(3);
+    // if是表达式，有返回值，默认情况下只会返回`()`
     let p = if let Some(x) = o { x } else { 0 };
     println!("{}", p);
+    println!("----------------call ifcondition----------------");
 }
 
 fn begin_code() {
     let s = String::from("hello");
     println!("{}", s);
     take_ownership(s);
-
+    // println!("{}", s);
+    // 将会报错，因为所有权被转移了
     let s1 = gives_ownership();
 
     println!("{}", s1);
@@ -78,6 +100,13 @@ fn begin_code() {
     change_str(&mut s4);
     println!("s4 {}", s4);
 
+    println!("------replacen-------");
+    let sn = "hello world, my world";
+    let mut ss = sn.to_string();
+    println!("{}", sn.replacen("world", "WORLD", 2));
+    println!("{}", sn.replacen("world", "WORLD", 1));
+    ss.replace_range(0..12, "w");
+    println!("replace_range:{:?}", ss);
     println!("{}", "-----".repeat(5));
 
     // 复合类型
@@ -170,6 +199,7 @@ fn begin_code() {
 }
 
 fn take_ownership(some_string: String) {
+    println!("{}", "-----------------take_ownership---------");
     println!("s2.len(): {}", some_string.len());
 }
 
@@ -250,3 +280,60 @@ fn operating_sys() {
         println!("other");
     }
 }
+
+fn statement() {
+    println!("--------------call statement------------");
+    assert_eq!(t_statement(), ());
+    let a = 3;
+    let b = 1 + 2;
+    assert_eq!(a, b);
+    println!("--------------end call statement------------");
+}
+
+fn t_statement() {
+    let x = 1;
+    let _y = x;
+}
+
+fn t_str_func() {
+    let mut origin_str = String::from("hello world!");
+    // pop 改变会改变原来的字符串
+    let p1 = origin_str.pop();
+    dbg!(p1);
+    // let s = dbg!(origin_str);
+    let p2 = origin_str.remove(0);
+    // dbg!(p2);
+    println!("p2:{}", p2);
+    println!("origin:{}", origin_str);
+
+    let mut origin_str2 = String::from("test value");
+    origin_str2.truncate(3);
+    println!("origin str 2:{}", origin_str2);
+
+    let add_res = origin_str + &origin_str2;
+    println!("add result:{}", add_res);
+
+    let s1 = String::from("hello ");
+    let s2 = String::from("world!");
+    let s3 = s1 + &s2;
+    println!("s3:{}", s3);
+    // 这里不会报错
+    assert_eq!(s3, "hello world!");
+    let s4 = s2.add(" add test");
+    println!("{}", s4);
+    let s5 = format!("{} {}", "hello", "world");
+    println!("s5:{}", s5);
+}
+
+fn t_tup() {
+    let tup = (12, 1.2, -12);
+    let tup2 = (12, 1.2, -12);
+
+    println!("tup:{}", tup.0);
+    assert_eq!(tup, tup2);
+
+    let (x, y, z) = tup;
+    println!("{} {} {}", x, y, z);
+}
+
+fn t_struct() {}
